@@ -25,7 +25,37 @@ export default class Post extends Component {
             foto: fotoAtualizada
         });
     }
+    exibeLikers(likers) {
+        if (likers.length <= 0) {
+            return;
+        }
+        return (
+            <Text
+                style={styles.likes}>
+                {likers.length} {likers.length > 1 ? 'curtidas' : 'curtida'}
+            </Text>
+        )
 
+
+    }
+    exibeLegenda(foto) {
+        if (foto.comentario === '')
+            return;
+
+        return (
+            <View style={styles.comentario}>
+                <Text
+                    style={styles.tituloComentario}
+                >
+                    {foto.loginUsuario}
+                </Text>
+                <Text>
+                    {foto.comentario}
+                </Text>
+
+            </View>
+        )
+    }
     render() {
         const { foto } = this.state
 
@@ -63,6 +93,10 @@ export default class Post extends Component {
                         />
                     </TouchableOpacity>
 
+                    {this.exibeLikers(foto.likers)}
+
+                    {this.exibeLegenda(foto)}
+
                 </View>
 
             </View>
@@ -76,6 +110,7 @@ const styles = StyleSheet.create({
     cabecalho: {
         margin: 10, flexDirection: 'row', alignItems: 'center'
     },
+
     user: {
         fontSize: 16,
         fontWeight: '500',
@@ -89,10 +124,21 @@ const styles = StyleSheet.create({
     },
     botaoDeLike: {
         height: 40,
-        width: 40
+        width: 40, marginBottom: 10,
     },
     rodape: {
         margin: 10
+    },
+    likes: {
+        fontSize: 16,
+        fontWeight: '900'
+    },
+    comentario: {
+        flexDirection: 'row'
+    },
+    tituloComentario: {
+        fontWeight: 'bold'
     }
+
 
 })
