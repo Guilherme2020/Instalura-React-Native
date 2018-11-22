@@ -157,6 +157,7 @@ export default class Post extends Component {
                             onChangeText={texto => this.setState({
                                 valorComentario: texto
                             })}
+                            underlineColorAndroid='transparent'
                         />
 
 

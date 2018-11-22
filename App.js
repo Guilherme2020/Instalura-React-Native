@@ -44,17 +44,7 @@ export default class InstaluraMobile extends Component {
   }
 
   render() {
-    const fotos = [
-      {
-        id: 1, usuario: 'rafael'
-      },
-      {
-        id: 2, usuario: 'alberto'
-      },
-      {
-        id: 3, usuario: 'guilherme'
-      }
-    ];
+
     return (
       <FlatList style={styles.container}
         data={this.state.fotos}
@@ -72,10 +62,10 @@ export default class InstaluraMobile extends Component {
     );
   }
 }
-
+const margem = Platform.OS == 'ios' ? 20 : 0
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20
+    marginTop: margem
   },
 
 
