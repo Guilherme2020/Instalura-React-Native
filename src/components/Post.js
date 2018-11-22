@@ -1,24 +1,70 @@
 import React, { Component } from 'react'
-import { View, Image, Text, Dimensions, StyleSheet } from 'react-native'
+import { View, Image, Text, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 
 const width = Dimensions.get('screen').width;
 
 
 
 export default class Post extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            foto: this.props.foto
+        }
+    }
+
+    carregaIcone(likeada) {
+        return likeada ? require('../../resources/img/s2-checked.png') : require('../../resources/img/s2.png')
+    }
+    like() {
+        const fotoAtualizada = {
+            ...this.state.foto,
+            likeada: !this.state.foto.likeada
+        }
+        this.setState({
+            foto: fotoAtualizada
+        });
+    }
 
     render() {
+        const { foto } = this.state
+
+
         return (
             <View>
                 <View style={styles.cabecalho}>
-                    <Image source={{uri: this.props.foto.urlPerfil}}
+                    <Image source={{ uri: foto.urlPerfil }}
                         style={styles.fotoPerfil}
                     />
-                    <Text>{this.props.foto.usuario}</Text>
+                    <Text
+                        style={
+                            styles.user
+                        }
+                    >{foto.loginUsuario}</Text>
                 </View>
-                <Image source={require('../../resources/img/alura.jpg')}
+                <Image source={{ uri: foto.urlFoto }}
                     style={styles.foto}
                 />
+                <View
+                    style={
+                        styles.rodape
+                    }
+                >
+                    <TouchableOpacity
+                        onPress={this.like.bind(this)}
+                    >
+                        <Image
+                            style={
+                                styles.botaoDeLike
+                            }
+                            source={
+                                this.carregaIcone(foto.likeada)
+                            }
+                        />
+                    </TouchableOpacity>
+
+                </View>
+
             </View>
         )
     }
@@ -30,11 +76,23 @@ const styles = StyleSheet.create({
     cabecalho: {
         margin: 10, flexDirection: 'row', alignItems: 'center'
     },
+    user: {
+        fontSize: 16,
+        fontWeight: '500',
+        fontFamily: 'Roboto'
+    },
     fotoPerfil: {
         marginRight: 10, borderRadius: 20, width: 40, height: 40
     },
     foto: {
         width: width, height: width
+    },
+    botaoDeLike: {
+        height: 40,
+        width: 40
+    },
+    rodape: {
+        margin: 10
     }
 
 })
