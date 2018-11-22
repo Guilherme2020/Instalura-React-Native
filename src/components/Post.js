@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Image, Text, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Image, Text, TextInput, Dimensions, StyleSheet, TouchableOpacity } from 'react-native'
 
 const width = Dimensions.get('screen').width;
 
@@ -9,7 +9,8 @@ export default class Post extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            foto: this.props.foto
+            foto: this.props.foto,
+            valorComentario: ''
         }
     }
 
@@ -17,13 +18,34 @@ export default class Post extends Component {
         return likeada ? require('../../resources/img/s2-checked.png') : require('../../resources/img/s2.png')
     }
     like() {
+
+        const { foto } = this.state;
+
+        let novaLista = []
+
+        if (!foto.likeada) {
+            novaLista = [
+                ...foto.likers,
+                { login: 'meuUsuario' }
+            ]
+
+        } else {
+            novaLista = foto.likers.filter(liker => {
+                return liker.login != 'meuUsuario'
+            })
+        }
+
+
+
         const fotoAtualizada = {
-            ...this.state.foto,
-            likeada: !this.state.foto.likeada
+            ...foto,
+            likeada: !foto.likeada,
+            likers: novaLista
         }
         this.setState({
             foto: fotoAtualizada
         });
+
     }
     exibeLikers(likers) {
         if (likers.length <= 0) {
@@ -55,6 +77,29 @@ export default class Post extends Component {
 
             </View>
         )
+    }
+    adicionaComentario() {
+
+        if(this.state.valorComentario === ''){
+            return;
+        }
+
+        const novaLista = [...this.state.foto.comentarios, {
+            id: this.state.valorComentario,
+            login: 'meuUsuario',
+            texto: this.state.valorComentario
+        }];
+
+        const fotoAtualizada = {
+            ...this.state.foto,
+            comentarios: novaLista
+        }
+
+        this.setState({
+            foto: fotoAtualizada,
+            valorComentario: ''
+        })
+        this.inputComentario.clear()
     }
     render() {
         const { foto } = this.state
@@ -97,6 +142,35 @@ export default class Post extends Component {
 
                     {this.exibeLegenda(foto)}
 
+                    {foto.comentarios.map(comentario =>
+                        <View style={styles.comentario} key={comentario.id}>
+                            <Text style={styles.tituloComentario} >{comentario.login}</Text>
+                            <Text>{comentario.texto}</Text>
+                        </View>
+                    )}
+
+                    <View style={styles.novoComentario}>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Adicione um comentario..."
+                            ref={input => this.inputComentario = input}
+                            onChangeText={texto => this.setState({
+                                valorComentario: texto
+                            })}
+                        />
+
+
+                        <TouchableOpacity
+                            onPress={this.adicionaComentario.bind(this)}
+                        >
+                            <Image
+                                style={styles.icone}
+                                source={require('../../resources/img/send.png')}
+                            />
+                        </TouchableOpacity>
+
+                    </View>
+
                 </View>
 
             </View>
@@ -137,7 +211,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     tituloComentario: {
-        fontWeight: 'bold'
+        fontWeight: 'bold', marginRight: 5,
+    },
+    novoComentario: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+    },
+    input: {
+        height: 40,
+        flex: 1,
+
+    },
+    icone: {
+        width: 30, height: 30
     }
 
 
