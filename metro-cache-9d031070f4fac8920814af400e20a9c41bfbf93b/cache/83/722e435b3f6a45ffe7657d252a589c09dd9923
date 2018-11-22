@@ -1,0 +1,163 @@
+__d(function (global, _require, module, exports, _dependencyMap) {
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+
+  var _react2 = _require(_dependencyMap[0], "react");
+
+  var _react3 = _interopRequireDefault(_react2);
+
+  var _index = _require(_dependencyMap[1], "./node_modules/react-transform-hmr/lib/index.js");
+
+  var _index2 = _interopRequireDefault(_index);
+
+  var _jsxFileName = "/home/guilherme/Documentos/Instalura/Instalura/App.js";
+
+  var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+  var _reactNative = _require(_dependencyMap[2], "react-native");
+
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+  function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+  function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+  function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+  var _components = {
+    App: {
+      displayName: "App"
+    }
+  };
+
+  var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: "/home/guilherme/Documentos/Instalura/Instalura/App.js",
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+  });
+
+  function _wrapComponent(id) {
+    return function (Component) {
+      return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+  }
+
+  var instructions = _reactNative.Platform.select({
+    ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
+    android: 'Double tap R on your keyboard to reload,\n' + 'Shake or press menu button for dev menu'
+  });
+
+  var width = _reactNative.Dimensions.get('screen').width;
+
+  var App = _wrapComponent("App")(function (_Component) {
+    _inherits(App, _Component);
+
+    function App() {
+      _classCallCheck(this, App);
+
+      return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).apply(this, arguments));
+    }
+
+    _createClass(App, [{
+      key: "render",
+      value: function render() {
+        var fotos = [{
+          id: 1,
+          usuario: 'rafael'
+        }, {
+          id: 2,
+          usuario: 'alberto'
+        }, {
+          id: 3,
+          usuario: 'guilherme'
+        }];
+        return _react3.default.createElement(_reactNative.FlatList, {
+          style: styles.container,
+          data: fotos,
+          keyExtractor: function keyExtractor(item) {
+            return String(item.id);
+          },
+          renderItem: function renderItem(_ref) {
+            var item = _ref.item;
+            return _react3.default.createElement(
+              _reactNative.View,
+              {
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 48
+                }
+              },
+              _react3.default.createElement(
+                _reactNative.View,
+                {
+                  style: styles.cabecalho,
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 49
+                  }
+                },
+                _react3.default.createElement(_reactNative.Image, {
+                  source: _require(_dependencyMap[3], './resources/img/alura.jpg'),
+                  style: styles.fotoPerfil,
+                  __source: {
+                    fileName: _jsxFileName,
+                    lineNumber: 50
+                  }
+                }),
+                _react3.default.createElement(
+                  _reactNative.Text,
+                  {
+                    __source: {
+                      fileName: _jsxFileName,
+                      lineNumber: 53
+                    }
+                  },
+                  item.usuario
+                )
+              ),
+              _react3.default.createElement(_reactNative.Image, {
+                source: _require(_dependencyMap[3], './resources/img/alura.jpg'),
+                style: styles.foto,
+                __source: {
+                  fileName: _jsxFileName,
+                  lineNumber: 55
+                }
+              })
+            );
+          },
+          __source: {
+            fileName: _jsxFileName,
+            lineNumber: 43
+          }
+        });
+      }
+    }]);
+
+    return App;
+  }(_react2.Component));
+
+  exports.default = App;
+
+  var styles = _reactNative.StyleSheet.create({
+    container: {
+      marginTop: 20
+    },
+    cabecalho: {
+      margin: 10,
+      flexDirection: 'row',
+      alignItems: 'center'
+    },
+    fotoPerfil: {
+      marginRight: 10,
+      borderRadius: 20,
+      width: 40,
+      height: 40
+    },
+    foto: {
+      width: width,
+      height: width
+    }
+  });
+});

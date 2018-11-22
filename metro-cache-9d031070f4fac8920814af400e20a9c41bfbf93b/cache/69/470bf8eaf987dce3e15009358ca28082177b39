@@ -1,0 +1,12 @@
+__d(function (global, _require, module, exports, _dependencyMap) {
+  module.exports = _require(_dependencyMap[0], "react-native/Libraries/Image/AssetRegistry").registerAsset({
+    "__packager_asset": true,
+    "httpServerLocation": "/assets/resources/img",
+    "width": 1280,
+    "height": 720,
+    "scales": [1],
+    "hash": "521a3ef49c0bdd7e08cacd3f97e3b128",
+    "name": "alura",
+    "type": "jpg"
+  });
+});
