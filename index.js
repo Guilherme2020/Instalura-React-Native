@@ -1,4 +1,10 @@
 import { AppRegistry } from 'react-native';
-import InstaluraMobile from './App';
+// import InstaluraMobile from './App';
+import  App  from './App'
 
-AppRegistry.registerComponent('Instalura', () => InstaluraMobile);
+
+AppRegistry.registerComponent('Instalura',
+   
+    () => App
+   
+);

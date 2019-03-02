@@ -1,73 +1,90 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+// /**
+//  * Sample React Native App
+//  * https://github.com/facebook/react-native
+//  * @flow
+//  */
 
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import {AsyncStorage} from 'react-native'
+// import {
+//   Platform,
+//   StyleSheet,
+//   Text, Dimensions,
+//   Image,
+//   ScrollView,
+//   FlatList,
+//   View
+// } from 'react-native';
+// // import Post from './src/components/Post'
+// import Feed from './components/Feed'
+// import Login from './src/screens/Login'
+
+// const margem = Platform.OS == 'ios' ? 20 : 0
+// const styles = StyleSheet.create({
+//   container: {
+//     marginTop: margem
+//   },
+
+// })
+
+import Feed from "./src/components/Feed";
+import Login from "./src/screens/Login";
 import {
-  Platform,
-  StyleSheet,
-  Text, Dimensions,
-  Image,
-  ScrollView,
-  FlatList,
-  View
-} from 'react-native';
-import Post from './src/components/Post'
-
-const width = Dimensions.get('screen').width;
+  createAppContainer,
+  createSwitchNavigator,
+  createStackNavigator
+} from "react-navigation";
+// AppRegistry.registerComponent('Instalura', () => InstaluraMobile);/
+// AppRegistry.registerComponent('Instalura', () => Login);
 
 
-export default class InstaluraMobile extends Component {
+  // AsyncStorage.getItem('token')
+  //   .then(token => {
+  //     if(token){
+  //       return {
+  //         screen: 'Feed',
+  //         navigationOptions: {
+  //           // header: null
+  //           title: 'Instalura'
+  //         }
+  //       }
+  //     }
+  //     return
+  //   })
 
-  constructor(props) {
-    super(props)
-    this.state = {
-      fotos: []
-    }
-  }
+const Navigation = createAppContainer(
+  createStackNavigator(
+    {
+      Login: {
+        screen: Login,
 
-  componentDidMount() {
-    let url = 'https://instalura-api.herokuapp.com/api/public/fotos/rafael'
-
-    fetch(url)
-      .then(resposta => resposta.json())
-      .then(json =>
-        this.setState({
-          fotos: json
-        }))
-      .catch(err => {
-        console.log(err)
-      })
-
-  }
-
-  render() {
-
-    return (
-      <FlatList style={styles.container}
-        data={this.state.fotos}
-        keyExtractor={item => String(item.id)}
-        renderItem={
-          ({ item }) =>
-            <Post
-              foto={item}
-            />
+        navigationOptions: {
+          header: null
         }
-      />
+      },
+      Feed: {
+        screen: Feed,
+        navigationOptions: {
+          // header: null
+          title: 'Instalura'
+        }
+      }
+    },
+    {
+      navigationOptions: {
+        header: null
+      }
+    }
+  )
+);
 
+// export default Navigation;
 
-
-    );
+export default class App extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return <Navigation />;
   }
 }
-const margem = Platform.OS == 'ios' ? 20 : 0
-const styles = StyleSheet.create({
-  container: {
-    marginTop: margem
-  },
-
-
-})
-
