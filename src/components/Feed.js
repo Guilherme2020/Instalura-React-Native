@@ -17,8 +17,9 @@ import {
   AsyncStorage
 } from "react-native";
 import Post from "./Post";
-
-const width = Dimensions.get("screen").width;
+import InstaluraFetchService from "../services/InstaluraFetchService";
+import Notificacao from '../api/Notificacao.android'
+// const width = Dimensions.get("screen").width;
 
 export default class Feed extends Component {
   constructor(props) {
@@ -30,29 +31,19 @@ export default class Feed extends Component {
 
   componentWillMount() {
     // let url = 'https://instalura-api.herokuapp.com/api/public/fotos/rafael'
-    let uri = "https://instalura-api.herokuapp.com/api/fotos";
-    AsyncStorage.getItem("token")
-      .then(token => {
-        return {
-          headers: new Headers({
-            "X-AUTH-TOKEN": token
-          })
-        };
-      })
-      .then(requestInfo =>
-        fetch(uri, requestInfo)
-          .then(resposta => resposta.json())
-          .then(json =>
-            this.setState({
-              fotos: json
-            })
-          )
-          .catch(err => {
-            alert(err);
-          })
-      );
+    this.load()
   }
+  load(){
+    let uri = '/fotos'
+    if(this.props.usuario)
+      uri = `public/fotos/${this.props.usuario}`
 
+    InstaluraFetchService.get("/fotos").then(json =>
+      this.setState({
+        fotos: json,status: 'Normal'
+      })
+    ).catch(e => this.setState({status:'Falha no carregamento'}));
+  }
   buscaPorId(idFoto) {
     return this.state.fotos.find(foto => foto.id === idFoto);
   }
@@ -64,6 +55,7 @@ export default class Feed extends Component {
   }
   like(idFoto) {
     // const foto = this.state.fotos.find(foto => foto.id === idFoto);
+    const listaOriginal = this.state.fotos
     const foto = this.buscaPorId(idFoto);
     AsyncStorage.getItem("usuario")
       .then(usuarioLogado => {
@@ -94,18 +86,15 @@ export default class Feed extends Component {
         // });
         this.atualizaFotos(fotoAtualizada);
       });
-    let url = `https://instalura-api.herokuapp.com/api/fotos/${idFoto}/like`;
-
-    AsyncStorage.getItem("token")
-      .then(token => {
-        return {
-          method: "POST",
-          headers: new Headers({
-            "X-AUTH-TOKEN": token
-          })
-        };
+    // let url = `https://instalura-api.herokuapp.com/api/fotos/${idFoto}/like`;
+    InstaluraFetchService.post(`/fotos/${idFoto}/like`).catch(e => {
+      
+      this.setState({
+        fotos:listaOriginal
       })
-      .then(requestInfo => fetch(url, requestInfo));
+      Notificacao.exibe('Ops..','Algo deu errado!')
+
+    });
   }
   adicionaComentario(idFoto, valorComentario, inputComentario) {
     if (valorComentario === "") {
@@ -114,22 +103,14 @@ export default class Feed extends Component {
 
     // const foto = this.state.fotos.find(foto => foto.id === idFoto);
     const foto = this.buscaPorId(idFoto);
-    const uri = `https://instalura-api.herokuapp.com/api/fotos/${idFoto}/comment`;
-    AsyncStorage.getItem("token")
-      .then(token => {
-        return {
-          method: "POST",
-          body: JSON.stringify({
-            texto: valorComentario
-          }),
-          headers: new Headers({
-            "Content-type": "application/json",
-            "X-AUTH-TOKEN": token
-          })
-        };
-      })
-      .then(requestInfo => fetch(uri, requestInfo))
-      .then(resposta => resposta.json())
+    const comentario = {
+      texto: valorComentario
+    };
+
+    // const uri = `https://instalura-api.herokuapp.com/api/fotos/${idFoto}/comment`;
+
+    InstaluraFetchService.post(`fotos/${idFoto}/comment`, comentario)
+
       .then(comentario => [...foto.comentarios, comentario])
       .then(novaLista => {
         const fotoAtualizada = {
@@ -138,7 +119,8 @@ export default class Feed extends Component {
         };
         this.atualizaFotos(fotoAtualizada);
         inputComentario.clear();
-      });
+      })
+      .catch(e => Notificacao.exibe("Ops..!","Não foi possível adicionar comentário"));
 
     // const novaLista = "";
     // [
@@ -158,6 +140,23 @@ export default class Feed extends Component {
     //   fotos
     // });
   }
+  verPerfilUsuario(idFoto){
+
+    const foto = this.buscaPorId(idFoto);
+
+    const navigate = this.props.navigation
+    navigate.push('PerfilUsuario',{
+      backButtonTitle: '',
+      navigationOptions: {
+         title: navigate.foto.loginUsuario,
+
+      },
+      passProps:{
+        usuario: foto.loginUsuario
+      }
+    })
+  }
+
   render() {
     return (
       <FlatList
@@ -169,6 +168,7 @@ export default class Feed extends Component {
             foto={item}
             likeCallback={this.like.bind(this)}
             comentarioCallback={this.adicionaComentario.bind(this)}
+            verPerfilCallBack={this.verPerfilUsuario.bind(this)}
           />
         )}
       />

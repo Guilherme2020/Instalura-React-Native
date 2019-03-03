@@ -68,13 +68,16 @@ const Navigation = createAppContainer(
           // header: null
           title: 'Instalura'
         }
+      },
+      PerfilUsuario:{
+        screen: Feed,
+        navigationOptions: {
+          // header: null
+          title: ''
+        }
       }
     },
-    {
-      navigationOptions: {
-        header: null
-      }
-    }
+
   )
 );
 
